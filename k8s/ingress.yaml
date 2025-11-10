@@ -1,0 +1,27 @@
+# ingress.yaml  (nginx ingress controller 사용)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: emotion-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - http:
+        paths:
+          # 백엔드: /api → emotion-backend:8080
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: emotion-backend
+                port:
+                  number: 8080
+          # 프론트: / → emotion-frontend:80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: emotion-frontend
+                port:
+                  number: 80
