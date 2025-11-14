@@ -1,6 +1,5 @@
 package com.moodtrack.main.entity;
 
-import com.moodtrack.main.dto.DiarySubmitResponse;
 import jakarta.persistence.*;
 import lombok.*;
 
