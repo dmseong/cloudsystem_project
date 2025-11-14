@@ -1,6 +1,7 @@
 package com.moodtrack.main.auth;
 
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.*;
 
@@ -10,11 +11,16 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    // 비밀 키를 256비트 키로 안전하게 생성(HS256 알고리즘은 최소 256비트의 키를 요구함)
-    private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final SecretKey secretKey;
+    private final long expirationTime; // ms 단위
 
-    // 토큰 만료 시간
-    private final long expirationTime = 1000 * 60 * 60; // 1 hour
+    public JwtUtil(
+            @Value("${jwt.secret}") String secret,
+            @Value("${jwt.expiration}") long expirationTime
+    ) {
+        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
+        this.expirationTime = expirationTime;
+    }
 
     // JWT 토큰 생성
     public String generateToken(String email) {
