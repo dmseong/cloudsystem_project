@@ -3,6 +3,9 @@ package com.moodtrack.main.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -23,9 +26,17 @@ public class User {
     @Column(nullable = false, unique = true, length = 120)
     private String email;
 
-    // 변경 필요 필드
+    @Builder.Default
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Diary> diaries = new ArrayList<>();
+
     public void changePassword(String encodedPw) {
         this.password = encodedPw;
+    }
+
+    public void addDiary(Diary diary) {
+        this.diaries.add(diary);
+        diary.setUser(this);
     }
 
 }
