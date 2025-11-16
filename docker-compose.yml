@@ -1,0 +1,12 @@
+services:
+  cloud-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: 2with13/cloud-backend:1.0.1
+
+  cloud-python-ml:
+    build:
+      context: ./python-ai
+      dockerfile: Dockerfile
+    image: 2with13/cloud-python-ml:1.0.1
