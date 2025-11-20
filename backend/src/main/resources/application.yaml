@@ -4,6 +4,10 @@ spring:
   profiles:
     active: local  # 기본 실행 프로필 (로컬)
 
+jwt:
+  secret: "this-is-my-secret-jwt-key-for-cloud-system-backend-application"
+  expiration: 86400000  # 1일
+
 ---
 # 로컬
 spring:
@@ -31,6 +35,9 @@ management:
       probes:
         enabled: true
 
+python:
+  url: "http://localhost:8000"
+
 ---
 # K8s
 spring:
@@ -43,7 +50,7 @@ spring:
     password: ${POSTGRES_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
 
 management:
   endpoints:
@@ -59,3 +66,6 @@ management:
       enabled: true
     readinessstate:
       enabled: true
+
+python:
+  url: "http://python-ml:8000"
