@@ -16,7 +16,12 @@ metadata:
   name: python-ml
   namespace: moodtracker
 spec:
-  replicas: 1
+  replicas: 2      # 업데이트 중에도 무중단에 유리
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1   # 새 파드를 최대 1개 더 띄움
+      maxUnavailable: 0   # 기존 파드는 0개만 다운 -> 완전 무중단
   selector:
     matchLabels:
       app: python-ml
@@ -27,6 +32,13 @@ spec:
     spec:
       containers:
         - name: python-ml
-          image: 2with13/cloud-python-ml:1.0.1
+          image: 2with13/cloud-python-ml:1.0.7
           ports:
             - containerPort: 8000
+          resources:
+            requests:
+              cpu: "1"
+              memory: "2Gi"
+            limits:
+                cpu: "2"
+                memory: "4Gi"
