@@ -8,6 +8,7 @@ from transformers import (
 )
 from keybert import KeyBERT
 from sentence_transformers import SentenceTransformer
+import warnings
 
 warnings.filterwarnings('ignore', category=UserWarning)
 
@@ -24,10 +25,11 @@ emotion_classifier = pipeline(
 )
 
 #keyword 모델
-embed_model_id = "skt/kobert-base-v1" 
+embed_model_id = "jhgan/ko-sroberta-multitask" 
+keyword_model = None
 
-embedding_model = SentenceTransformer(embed_model_id)
-keyword_model = KeyBERT(model=embedding_model)
+st_model = SentenceTransformer(embed_model_id)
+keyword_model = KeyBERT(model=st_model)
 
 
 # ====== 공통 요청 모델 ======
@@ -43,8 +45,14 @@ class EmotionResponse(BaseModel):
     score: float
     intensity: int   # 퍼센트 값 (0~100)
 
+# 키워드와 점수 모델
+class KeywordItem(BaseModel):
+    keyword: str
+    relevance_score: float
+
+# 응답 모델
 class KeywordResponse(BaseModel):
-    keywords: list[str] # 추출된 키워드 목록
+    keywords: list[KeywordItem] # 추출된 키워드 목록
 
 if __name__ == "__main__":
     import uvicorn
