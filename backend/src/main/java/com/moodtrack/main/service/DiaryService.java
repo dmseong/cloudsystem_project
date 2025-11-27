@@ -47,6 +47,7 @@ public class DiaryService {
                 .score(diary.getScore())
                 .intensity(diary.getIntensity())
                 .summary(diary.getSummary())
+                .keywords(diary.getKeywords())
                 .createdAt(diary.getCreatedAt())
                 .build());
     }
@@ -109,7 +110,11 @@ public class DiaryService {
         var summaryResult = emotionAiClient.summarize(content);
         String summaryText = summaryResult.getSummary();
 
-        // 3) 일기 DB에 저장
+        // 3) 파이썬 키워드 추출 API 호출
+        var keywordResult = emotionAiClient.extractKeywords(content);
+        List<String> keywords = keywordResult.getKeywords();  // 키워드 목록
+
+        // 4) 일기 DB에 저장
         Diary diary = Diary.builder()
                 .user(user)
                 .content(content)
@@ -117,18 +122,20 @@ public class DiaryService {
                 .label(emotionLabel)
                 .score(emotionResult.getScore())
                 .intensity(emotionResult.getIntensity())
+                .keywords(keywords)
                 .createdAt(LocalDateTime.now())
                 .build();
 
         diaryRepository.save(diary);
 
-        // 4) 클라이언트에 분석 결과 + 요약 반환
+        // 5) 클라이언트에 분석 결과 + 요약 + 키워드 반환
         return DiarySubmitResponse.builder()
                 .diaryId(diary.getId())
                 .label(emotionLabel)
                 .score(emotionResult.getScore())
                 .intensity(emotionResult.getIntensity())
                 .summary(summaryText)
+                .keywords(keywords)
                 .build();
     }
 }
