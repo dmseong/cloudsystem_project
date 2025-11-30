@@ -23,7 +23,7 @@ export default function EmotionGraph({ diaries }) {
     ];
 
     return (
-        <div>
+        <div className="w-full flex justify-center items-center">
             <EmotionDonutChart data={data} />
         </div>
     );
