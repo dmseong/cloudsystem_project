@@ -11,7 +11,7 @@ export default function FindIdForm() {
     };
 
     return (
-        <div className="w-full max-w-md mx-auto bg-white p-6 rounded-xl shadow space-y-6">
+        <div className="w-full max-w-md mx-auto bg-white p-6 rounded-xl shadow space-y-6 min-w-[300px]">
             <h1 className="text-3xl font-bold text-center">아이디 찾기</h1>
             <p className="text-center text-gray-500">가입 시 등록한 이메일을 입력하세요</p>
 

@@ -51,7 +51,7 @@ export default function MyPage() {
     ];
 
     return (
-        <div className=" w-full min-h-screen bg-gray-100 min-w-[360px]">
+        <div className=" w-full min-h-screen bg-gray-100 min-w-[360px] min-h-[670px]">
             < Header />
             <div className="w-full max-w-md px-4 py-6 space-y-6 justify-center mx-auto">
 

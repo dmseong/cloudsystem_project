@@ -11,7 +11,7 @@ export default function FindPasswordForm() {
     };
 
     return (
-        <div className="w-full max-w-md mx-auto bg-white p-6 rounded-xl shadow space-y-6">
+        <div className="w-full max-w-md mx-auto bg-white p-6 rounded-xl shadow space-y-6 min-w-[300px]">
             <h1 className="text-3xl font-bold text-center">비밀번호 찾기</h1>
             <p className="text-center text-gray-500">이메일로 인증 코드를 보내드립니다</p>
 
