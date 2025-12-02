@@ -6,7 +6,7 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import FindIdPage from "./pages/FindIdPage/FindIdPage";
 import FindPwPage from "./pages/FindPwPage/FindPwPage";
 import DiaryPage from "./pages/DiaryPage/DiaryPage";
-
+import AnalysisPage from "./pages/AnalysisPage/AnalysisPage";
 
 function App() {
   return (
@@ -17,6 +17,7 @@ function App() {
         <Route path="/find-pw" element={<FindPwPage />} />
         <Route path="/diary" element={<DiaryPage />} />
         <Route path="/mypage" element={<MyPage />} />
+        <Route path="/analysis" element={<AnalysisPage />} />
       </Routes>
     </BrowserRouter>
   );

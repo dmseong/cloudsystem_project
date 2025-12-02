@@ -1,48 +1,87 @@
-// src/components/DiaryForm.jsx
+// frontend/src/pages/DiaryPage/DiaryForm.jsx
 
 import { useState } from "react";
-import DatePicker from "react-datepicker"; // react-datepicker import
+import { useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import api from "../../utils/axiosInstance";
 
 export default function DiaryForm() {
     const [content, setContent] = useState("");
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e) => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        alert("일기가 등록되었습니다!");
+
+        if (!content.trim()) {
+            alert("일기 내용을 입력해주세요!");
+            return;
+        }
+
+        const formattedDate = selectedDate.toISOString().split("T")[0];
+
+        try {
+            setLoading(true);
+
+            const res = await api.post("/api/analysis", {
+                diaryText: content,
+                date: formattedDate,
+            });
+
+            const result = res.data.data;
+
+            // ✨ AnalysisPage로 이동하면서 데이터 전달
+            navigate("/analysis", {
+                state: {
+                    diaryText: result.diaryText,
+                    analysis: result.analysis,
+                    emotion: result.emotion,
+                    music: result.music,
+                },
+            });
+
+        } catch (error) {
+            console.error(error);
+            alert("AI 분석 중 오류가 발생했습니다!");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div className="w-full max-w-md mx-auto bg-white p-6 rounded-xl shadow space-y-6 min-w-[300px]">
-            {/* 날짜 선택 부분 */}
-            <div className="flex justify-center items-center space-x-4">
+
+            {/* 날짜 선택 */}
+            <div className="flex justify-center items-center">
                 <DatePicker
                     selected={selectedDate}
                     onChange={(date) => setSelectedDate(date)}
-                    dateFormat="dd/MM/yyyy EEE"
-                    className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-0 focus:border-black justify-center text-center"
+                    dateFormat="yyyy-MM-dd"
+                    className="w-full p-3 border-2 border-gray-300 rounded-lg text-center 
+                               focus:outline-none focus:ring-0 focus:border-black"
                 />
             </div>
 
-            {/* 일기 제목 */}
             <div className="text-center text-xl font-semibold mt-2">오늘의 일기</div>
 
-            {/* 일기 작성 폼 */}
             <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-                <div>
-                    <textarea
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                        className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black/40"
-                        placeholder="일기를 작성하세요..."
-                        rows="6"
-                        required
-                    />
-                </div>
 
-                {/* 버튼들 */}
+                {/* 본문 입력 */}
+                <textarea
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black/40"
+                    placeholder="일기를 작성하세요..."
+                    rows="6"
+                    required
+                />
+
+                {/* 버튼 그룹 */}
                 <div className="flex justify-between">
-                    {/* 취소 버튼 */}
+
+                    {/* 취소 */}
                     <button
                         type="button"
                         onClick={() => setContent("")}
@@ -52,7 +91,7 @@ export default function DiaryForm() {
                         Cancel
                     </button>
 
-                    {/* 일기 등록 버튼 */}
+                    {/* 등록 */}
                     <button
                         type="submit"
                         className="w-1/3 py-2 text-sm bg-black text-white rounded-lg 
@@ -62,6 +101,16 @@ export default function DiaryForm() {
                     </button>
                 </div>
             </form>
+
+            {/* 🔄 AI 분석 로딩 모달 */}
+            {loading && (
+                <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+                    <div className="bg-white px-8 py-6 rounded-lg shadow text-center space-y-4">
+                        <div className="animate-spin w-8 h-8 border-4 border-gray-300 border-t-black rounded-full mx-auto"></div>
+                        <p className="font-medium text-gray-700">AI가 분석 중입니다...</p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

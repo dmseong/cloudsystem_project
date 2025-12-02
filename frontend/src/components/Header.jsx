@@ -9,10 +9,10 @@ export default function Header() {
     return (
         <>
             {/* 헤더는 항상 full width */}
-            <header className="w-full bg-white shadow-sm z-50">
+            <header className="w-full bg-white shadow-sm z-50 mb-4">
 
-                {/* ⭐ 모바일 + 데스크탑 공통: 전체 너비 flex 컨테이너 ⭐ */}
-                <div className="w-full px-4 md:px-8 h-20 flex items-center justify-between">
+                {/* 모바일 + 데스크탑 공통: 전체 너비 flex 컨테이너 */}
+                <div className="w-full px-4 my:px-2 md:px-8 h-20 flex items-center justify-between">
 
                     {/* Logo */}
                     <img src={logo} alt="logo.png" className="w-10 h-10 md:w-12 md:h-10" />
