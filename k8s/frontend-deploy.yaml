@@ -2,19 +2,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: moodtracker-frontend
+  name: react-frontend
+  namespace: moodtracker
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: moodtracker-frontend
+      app: react-frontend
   template:
     metadata:
       labels:
-        app: moodtracker-frontend
+        app: react-frontend
     spec:
       containers:
-        - name: moodtracker-frontend
+        - name: react-frontend
           # TODO: 이미지 이름 변경 필요
           image: your-dockerhub-id/moodtracker-frontend:latest
           ports:
@@ -23,11 +24,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: moodtracker-frontend-svc
+  name: reacet-frontend
+  namespace: moodtracker
 spec:
   selector:
-    app: moodtracker-frontend
+    app: react-frontend
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
+  type: ClusterIP
