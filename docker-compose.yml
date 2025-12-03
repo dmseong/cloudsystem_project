@@ -3,7 +3,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    image: 2with13/cloud-backend:1.0.5
+    image: 2with13/cloud-backend:1.0.6
 
   cloud-python-ml:
     build:
