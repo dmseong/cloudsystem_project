@@ -1,4 +1,4 @@
-// src/components/Header.jsx
+// frontend/src/components/Header.jsx
 
 import { useState } from "react";
 import logo from "../assets/logo.png";
@@ -15,10 +15,11 @@ export default function Header() {
                 <div className="w-full px-4 my:px-2 md:px-8 h-20 flex items-center justify-between">
 
                     {/* Logo */}
-                    <img src={logo} alt="logo.png" className="w-10 h-10 md:w-12 md:h-10" />
+                    <img src={logo} alt="logo.png" className="w-10 h-10 md:w-12 md:h-10"
+                        onClick={() => window.open("/")} />
 
                     {/* 데스크탑 메뉴 */}
-                    <nav className="hidden md:flex space-x-6 text-gray-700 font-medium">
+                    < nav className="hidden md:flex space-x-6 text-gray-700 font-medium" >
                         <a href="/" className="hover:text-black">홈</a>
                         <a href="/mypage" className="hover:text-black">마이페이지</a>
                         <a href="/diary" className="hover:text-black">일기작성</a>
@@ -35,15 +36,17 @@ export default function Header() {
                         <span className="block w-6 h-0.5 bg-black"></span>
                     </button>
                 </div>
-            </header>
+            </header >
 
             {/* 모바일 오버레이 */}
-            {open && (
-                <div
-                    className="fixed inset-0 bg-black/40 z-40 md:hidden"
-                    onClick={() => setOpen(false)}
-                />
-            )}
+            {
+                open && (
+                    <div
+                        className="fixed inset-0 bg-black/40 z-40 md:hidden"
+                        onClick={() => setOpen(false)}
+                    />
+                )
+            }
 
             {/* 모바일 Drawer */}
             <div
