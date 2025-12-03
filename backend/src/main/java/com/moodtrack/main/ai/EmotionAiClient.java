@@ -8,9 +8,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -65,6 +67,27 @@ public class EmotionAiClient {
         }
     }
 
+    /**
+     * 키워드 추출 호출 (/extract_keywords)
+     */
+    public KeywordResult extractKeywords(String text) {
+        String url = pythonUrl + "/extract_keywords";
+
+        Map<String, String> request = new HashMap<>();
+        request.put("text", text);
+
+        try {
+            ResponseEntity<KeywordResult> response =
+                    restTemplate.postForEntity(url, request, KeywordResult.class);
+
+            return response.getBody();
+
+        } catch (HttpClientErrorException e) {
+            log.error("Python 키워드 추출 실패", e);
+            throw new AppException(ErrorCode.HF_API_ERROR, "키워드 추출 서버 호출 실패");
+        }
+    }
+
     @Data
     public static class EmotionResult {
         private String label;
@@ -75,5 +98,10 @@ public class EmotionAiClient {
     @Data
     public static class SummaryResult {
         private String summary;
+    }
+
+    @Data
+    public static class KeywordResult {
+        private List<String> keywords;  // 추출된 키워드 목록
     }
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "diary")
@@ -40,6 +41,12 @@ public class Diary {
 
     @Column(name = "summary", columnDefinition = "text")
     private String summary;
+
+    @ElementCollection
+    @CollectionTable(name = "diary_keywords", joinColumns = @JoinColumn(name = "diary_id"))
+    @Column(name = "keyword")
+    private List<String> keywords;
+
 
     // 연관관계 편의 메서드
     public void setUser(User user) {

@@ -8,6 +8,7 @@ from transformers import (
 )
 from keybert import KeyBERT
 from sentence_transformers import SentenceTransformer
+import warnings
 
 warnings.filterwarnings('ignore', category=UserWarning)
 
@@ -24,10 +25,11 @@ emotion_classifier = pipeline(
 )
 
 #keyword 모델
-embed_model_id = "skt/kobert-base-v1" 
+embed_model_id = "jhgan/ko-sroberta-multitask"
+keyword_model = None
 
-embedding_model = SentenceTransformer(embed_model_id)
-keyword_model = KeyBERT(model=embedding_model)
+st_model = SentenceTransformer(embed_model_id)
+keyword_model = KeyBERT(model=st_model)
 
 
 # ====== 공통 요청 모델 ======
@@ -43,8 +45,13 @@ class EmotionResponse(BaseModel):
     score: float
     intensity: int   # 퍼센트 값 (0~100)
 
+# 키워드와 점수 모델
+class KeywordItem(BaseModel):
+    keyword: str
+
+# 응답 모델
 class KeywordResponse(BaseModel):
-    keywords: list[str] # 추출된 키워드 목록
+    keywords: list[str]  # 키워드 목록만 반환
 
 if __name__ == "__main__":
     import uvicorn
@@ -91,28 +98,25 @@ def analyze(diary: TextRequest):
         "intensity": round(result["score"] * 100),  # 점수를 %로 변환
     }
 
-#키워드 엔드포인트
+# 키워드 엔드포인트
 @app.post("/extract_keywords", response_model=KeywordResponse)
 def extract_keywords(input: TextRequest):
 
     diary_text = input.text
-    
+
     # KeyBERT를 사용하여 키워드 추출
     keywords_with_scores = keyword_model.extract_keywords(
-        docs=diary_text, 
-        keyphrase_ngram_range=(1, 4), 
-        stop_words=None, 
+        docs=diary_text,
+        keyphrase_ngram_range=(1, 4),
+        stop_words=None,
         top_n=20,
         use_mmr=True,
         diversity=0.5
     )
-    
-    # (키워드, 점수)에서 키워드만 추출
-    keywords = [
-        KeywordItem(keyword=keyword, relevance_score=score) 
-        for keyword, score in keywords_with_scores
-    ]
-    
+
+    # (키워드, 점수)에서 키워드만 추출하여 반환
+    keywords = [keyword for keyword, _ in keywords_with_scores]  # keyword만 추출
+
     return {
         "keywords": keywords
     }
