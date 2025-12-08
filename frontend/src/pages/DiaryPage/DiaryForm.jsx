@@ -25,6 +25,7 @@ export default function DiaryForm() {
 
             const res = await api.post("/api/diary/submit", {
                 content,
+                selectedDate: selectedDate.toISOString().split("T")[0]
             });
 
             const result = res.data;
