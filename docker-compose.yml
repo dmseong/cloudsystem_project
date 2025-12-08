@@ -1,9 +1,15 @@
 services:
+  cloud-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: 2with13/cloud-frontend:1.1.6
+
   cloud-backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    image: 2with13/cloud-backend:1.1.5
+    image: 2with13/cloud-backend:1.1.7
 
   cloud-python-ml:
     build:
