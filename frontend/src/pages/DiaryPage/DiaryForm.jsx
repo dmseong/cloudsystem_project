@@ -27,35 +27,30 @@ export default function DiaryForm() {
                 content,
             });
 
-            const result = res.data.data;
+            const result = res.data;
 
             let music = {
-                title: result.music.title,
+                title: "오늘의 기분에 맞는 음악",
                 url: "",
-                coverUrl:
-                    "https://i.scdn.co/image/ab67616d0000b273e6cfbd918066c7f684bb6a53",
+                coverUrl: "https://i.scdn.co/image/ab67616d0000b273e6cfbd918066c7f684bb6a53",
             };
 
-            if (Array.isArray(result.musicList) && result.musicList.length > 0) {
-                const m = result.musicList[0];
+            if (Array.isArray(result.musicTitles) && result.musicTitles.length > 0) {
                 music = {
-                    title: m.trackTitle
-                        ? `${m.artist ?? ""} - ${m.trackTitle}`
-                        : "오늘의 기분에 맞는 음악",
-                    url: m.spotifyUrl ?? "",
-                    coverUrl:
-                        m.coverUrl ??
+                    title: `${result.musicArtists[0]} - ${result.musicTitles[0]}`,
+                    url: result.musicUrls?.[0] ?? "",
+                    coverUrl: result.musicCovers?.[0] ??
                         "https://i.scdn.co/image/ab67616d0000b273e6cfbd918066c7f684bb6a53",
                 };
             }
 
             navigate("/analysis", {
                 state: {
-                    diaryText: result.content,
-                    analysis: result.analysis,
-                    emotion: result.emotion,
+                    diaryText: content,
+                    analysis: result.summary,
+                    emotion: result.label,
                     keywords: result.keywords,
-                    music,
+                    music
                 },
             });
 
