@@ -3,7 +3,7 @@ import { PieChart, Pie, Cell, Tooltip } from "recharts";
 export default function EmotionDonutChart({ data }) {
     console.log("EmotionDonutChart → data:", data);
 
-    if (!data || !Array.isArray(data)) {
+    if (!data || !Array.isArray(data) || data.every(d => d.value === 0)) {
         return <div>아직 기록된 감정이 없습니다.</div>;
     }
 
