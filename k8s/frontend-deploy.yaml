@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: react-frontend
-          image: kwonyujin04/cloud_frontend:12.04.tue
+          image: 2with13/cloud-frontend:1.0.6
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
