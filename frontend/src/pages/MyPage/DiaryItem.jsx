@@ -11,7 +11,7 @@ export default function DiaryItem({ date, content, keywords }) {
             <p className="text-gray-800">{content}</p>
             {keywords && (
                 <p className="text-gray-500 text-sm">
-                    키워드: {keywords.join(", ")}
+                    {keywords.join(", ")}
                 </p>
             )}
         </motion.div>

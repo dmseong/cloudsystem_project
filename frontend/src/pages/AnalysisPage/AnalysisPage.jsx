@@ -31,6 +31,7 @@ export default function AnalysisPage() {
                     diaryText={state.diaryText}
                     analysis={state.analysis}
                     emotion={state.emotion}
+                    keywords={state.keywords}
                     music={state.music}
                 />
             </div>

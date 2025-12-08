@@ -59,11 +59,11 @@ export default function AnalysisResult({ diaryText, emotion, analysis, music, ke
             </div>
 
             {/* 키워드 영역 */}
-            {keywordText && (
+            {Array.isArray(keywords) && keywords.length > 0 && (
                 <div>
                     <label className="block text-lg font-semibold">키워드</label>
                     <div className="mt-2 p-3 rounded-lg bg-gray-50 text-gray-700 text-sm">
-                        키워드: {keywordText}
+                        {keywordText}
                     </div>
                 </div>
             )}
