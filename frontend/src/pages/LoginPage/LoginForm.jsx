@@ -21,8 +21,9 @@ export default function LoginForm() {
                 password,
             });
 
-            const token = res.data.data.token;
-            localStorage.setItem("token", token);
+            const data = res.data.data;
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("userName", data.username);
 
             alert("로그인 성공");
             window.location.href = "/mypage";
