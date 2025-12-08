@@ -14,7 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -68,10 +69,10 @@ public class DiaryService {
     // 최근 7일간 감정 통계 조회
     @Transactional(readOnly = true)
     public DiaryStatsResponse getWeeklyStats(User user) {
-        LocalDateTime end = LocalDateTime.now();
-        LocalDateTime start = end.minusDays(6); // 최근 7일
+        OffsetDateTime end = OffsetDateTime.now(ZoneId.of("Asia/Seoul"));
+        OffsetDateTime start = end.minusDays(6).withHour(0).withMinute(0).withSecond(0).withNano(0);
 
-        var diaries = diaryRepository.findDiariesBetween(user, start.withHour(0).withMinute(0), end);
+        var diaries = diaryRepository.findDiariesBetween(user, start, end);
 
         return buildStatsResponse(start, end, diaries);
     }
@@ -79,10 +80,9 @@ public class DiaryService {
     // 최근 1달간 감정 통계 조회
     @Transactional(readOnly = true)
     public DiaryStatsResponse getMonthlyStats(User user) {
-        LocalDateTime end = LocalDateTime.now();
-
-        // 이번 달 1일부터 오늘까지
-        LocalDateTime start = end.withDayOfMonth(1).withHour(0).withMinute(0);
+        OffsetDateTime end = OffsetDateTime.now(ZoneId.of("Asia/Seoul"));
+        OffsetDateTime start = end.withDayOfMonth(1)
+                .withHour(0).withMinute(0).withSecond(0).withNano(0);
 
         var diaries = diaryRepository.findDiariesBetween(user, start, end);
 
@@ -90,7 +90,7 @@ public class DiaryService {
     }
 
     // 공통 통계 계산 메서드
-    private DiaryStatsResponse buildStatsResponse(LocalDateTime start, LocalDateTime end, List<Diary> diaries) {
+    private DiaryStatsResponse buildStatsResponse(OffsetDateTime start, OffsetDateTime end, List<Diary> diaries) {
 
         long total = diaries.size();
 
@@ -140,7 +140,7 @@ public class DiaryService {
                 .score(emotionResult.getScore())
                 .intensity(emotionResult.getIntensity())
                 .keywords(keywords)
-                .createdAt(LocalDateTime.now())
+                .createdAt(OffsetDateTime.now(ZoneId.of("Asia/Seoul")))
                 .build();
 
         List<Music> musicList = musicRecommendations.stream().map(musicRecommendation -> {

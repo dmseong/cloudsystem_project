@@ -3,7 +3,8 @@ package com.moodtrack.main.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Entity
@@ -27,7 +28,7 @@ public class Diary {
     private String content;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     // --- AI 분석 결과 ---
     @Column(name = "label")
@@ -55,7 +56,7 @@ public class Diary {
     @PrePersist
     private void onCreate() {
         if (this.createdAt == null) {
-            this.createdAt = LocalDateTime.now();
+            this.createdAt = OffsetDateTime.now(ZoneId.of("Asia/Seoul"));
         }
     }
 }

@@ -7,12 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
     @Query("SELECT d FROM Diary d WHERE d.user = :user AND d.createdAt BETWEEN :start AND :end")
-    List<Diary> findDiariesBetween(User user, LocalDateTime start, LocalDateTime end);
+    List<Diary> findDiariesBetween(User user, OffsetDateTime start, OffsetDateTime end);
 
     @Query("SELECT d FROM Diary d JOIN FETCH d.musicList WHERE d.user = :user ORDER BY d.createdAt DESC")
     Page<Diary> findByUserOrderByCreatedAtDescWithMusic(User user, Pageable pageable);

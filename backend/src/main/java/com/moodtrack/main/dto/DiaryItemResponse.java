@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Data
@@ -24,5 +24,5 @@ public class DiaryItemResponse {
     private List<String>  musicArtists;
     private List<String>  musicCovers;
     private List<String>  musicUrls;
-    private LocalDateTime createdAt;
+    private OffsetDateTime createdAt;
 }
