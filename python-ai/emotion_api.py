@@ -42,15 +42,20 @@ EMOTION_KOREAN_LABELS = [
 ]
 
 def get_emotion_korean_label(default_label: str) -> str:
+    # 이미 한글 라벨일 경우 그대로 반환
+    if default_label in EMOTION_KOREAN_LABELS:
+        return default_label
 
-    #숫자 인덱스 한국어로 변환
-    index = int(default_label)
+    # 숫자가 들어올 경우만 변환
+    try:
+        index = int(default_label)
+        if 0 <= index < len(EMOTION_KOREAN_LABELS):
+            return EMOTION_KOREAN_LABELS[index]
+    except ValueError:
+        pass
 
-    if 0 <= index < len(EMOTION_KOREAN_LABELS):
-        return EMOTION_KOREAN_LABELS[index]
-
-    #예외 처리
-    return '중립'
+    # 알 수 없는 형태 → 기본값
+    return "중립"
 
 # ====== 요약 모델 로드 ======
 print("요약 모델 초기화 완료")
